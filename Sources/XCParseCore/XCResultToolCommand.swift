@@ -87,7 +87,13 @@ open class XCResultToolCommand {
                 self.id = identifier;
 
                 // Now let's figure out the filename & path
-                let filename = attachment.filename ?? identifier
+                let filename: String
+                if let timestamp = attachment.timestamp {
+                    let unixTimestampMilliseconds = Int(timestamp.timeIntervalSince1970 * 1000)
+                    filename = "\(unixTimestampMilliseconds)_" + (attachment.filename ?? identifier)
+                } else {
+                    filename = attachment.filename ?? identifier
+                }
                 let attachmentOutputPath = URL.init(fileURLWithPath: outputPath).appendingPathComponent(filename)
                 self.outputPath = attachmentOutputPath.path
             }
